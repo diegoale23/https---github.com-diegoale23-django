@@ -1,33 +1,19 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Bienvenido a mi Blog</title>
-    {% load static %} <!-- Asegúrate de cargar la biblioteca estática aquí -->
-    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
-</head>
-<body>
-    <header>
-        <h1>Bienvenido a mi Blog</h1>
-        <nav>
-            <ul>
-                <li><a href="{% url 'post-list' %}">Inicio</a></li>
-                <li><a href="{% url 'post-create' %}">Nuevo Post</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <h2>Últimos Posts</h2>
-        <ul>
-            {% for post in posts %}
-            <li>
-                <a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a>
-                <p>{{ post.content|truncatewords:20 }}</p>
-                <p><a href="{% url 'post-update' post.pk %}">Editar</a> | <a href="{% url 'post-delete' post.pk %}">Eliminar</a></p>
-            </li>
-            {% empty %}
-            <li>No hay posts disponibles.</li>
-            {% endfor %}
-        </ul>
-    </main>
-</body>
-</html>
+<!-- templates/index.html -->
+{% extends 'base.html' %}
+
+{% block title %}Inicio - Bienvenido a mi Blog{% endblock %}
+
+{% block content %}
+<h2>Últimos Posts</h2>
+<ul>
+    {% for post in posts %}
+    <li>
+        <a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a>
+        <p>{{ post.content|truncatewords:20 }}</p>
+        <p><a href="{% url 'post-update' post.pk %}">Editar</a> | <a href="{% url 'post-delete' post.pk %}">Eliminar</a></p>
+    </li>
+    {% empty %}
+    <li>No hay posts disponibles.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

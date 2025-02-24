@@ -4,6 +4,7 @@ from django.shortcuts import render
 from .models import Post
 
 from django.http import HttpResponse
+from django.contrib.auth.views import LoginView, LogoutView
 
 def hola_mundo(request):
     return HttpResponse("Hola Mundo")
