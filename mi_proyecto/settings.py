@@ -1,9 +1,12 @@
 from pathlib import Path
 import os
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 
+# Al inicio de settings.py, agrega esto temporalmente para diagnóstico
+print("Settings cargado correctamente")  # Verifica que el archivo se carga
 # Cargar variables de entorno desde un archivo .env
-load_dotenv()
+
+#load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -11,8 +14,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'login'
 
-# Mantén la clave secreta usada en producción en secreto
-SECRET_KEY = os.getenv('SECRET_KEY')
+# Asegúrate de que SECRET_KEY tenga un valor si .env no está funcionando
+SECRET_KEY = os.getenv('SECRET_KEY', 'clave-secreta-para-pruebas')  # Valor por defecto
 
 # No ejecutes con debug activado en producción
 DEBUG = True
@@ -66,14 +69,21 @@ WSGI_APPLICATION = 'mi_proyecto.wsgi.application'
 # Database
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': os.environ.get('DATABASE_ENGINE', 'django.db.backends.sqlite3'),
+        'NAME': os.environ.get('DATABASE_NAME', os.path.join(BASE_DIR, 'db.sqlite3')),
+
+    }   
+}
+
+'''        'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv('DB_NAME'),
         'USER': os.getenv('DB_USER'),
         'PASSWORD': os.getenv('DB_PASSWORD'),
         'HOST': os.getenv('DB_HOST'),
         'PORT': os.getenv('DB_PORT'),
-    }
-}
+
+'''
+    
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -107,6 +117,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+'''
 # Configurar seguridad adicional (solo en producción)
 SECURE_HSTS_SECONDS = 3600
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
@@ -114,15 +125,11 @@ SECURE_HSTS_PRELOAD = True
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'DENY'
+'''
+SECURE_SSL_REDIRECT = False
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
 
-if not DEBUG:
-    SECURE_SSL_REDIRECT = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-else:
-    SECURE_SSL_REDIRECT = False
-    SESSION_COOKIE_SECURE = False
-    CSRF_COOKIE_SECURE = False
 
 # Configuración de almacenamiento de archivos estáticos
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
