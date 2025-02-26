@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
-#from dotenv import load_dotenv
+from django.core.management.utils import get_random_secret_key
+from dotenv import load_dotenv
 
 # Al inicio de settings.py, agrega esto temporalmente para diagnóstico
 print("Settings cargado correctamente")  # Verifica que el archivo se carga
@@ -15,13 +16,15 @@ LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'login'
 
 # Asegúrate de que SECRET_KEY tenga un valor si .env no está funcionando
-SECRET_KEY = os.getenv('SECRET_KEY', 'clave-secreta-para-pruebas')  # Valor por defecto
+
+load_dotenv()
+SECRET_KEY = os.getenv('SECRET_KEY')
+#SECRET_KEY = os.getenv('SECRET_KEY', 'clave-secreta-para-pruebas')  # Valor por defecto
 
 # No ejecutes con debug activado en producción
-DEBUG = True
-
+DEBUG = False
 # Agrega tus dominios permitidos aquí
-ALLOWED_HOSTS = ['mi_proyecto.up.railway.app', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'diegoale23.pythonanywhere.com']
 # Application definition
 
 INSTALLED_APPS = [
